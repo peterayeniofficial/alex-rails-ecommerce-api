@@ -1,5 +1,6 @@
 # app/presenters/base_presenter.rb
 class BasePresenter
+  include Rails.application.routes.url_helpers
 
   # Define a class level instance variable
   @build_attributes = []
