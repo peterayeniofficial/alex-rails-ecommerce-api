@@ -2,7 +2,7 @@
 class BooksController < ApplicationController
 
   def index
-    books = Book.all.map do |book|
+    books = paginate(Book.all).map do |book|
       FieldPicker.new(BookPresenter.new(book, params)).pick
     end
 
