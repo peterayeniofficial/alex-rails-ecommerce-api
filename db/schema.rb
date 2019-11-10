@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191109110445) do
+ActiveRecord::Schema.define(version: 20191110102606) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "authors", force: :cascade do |t|
     t.string "given_name"
@@ -26,13 +29,22 @@ ActiveRecord::Schema.define(version: 20191109110445) do
     t.string "isbn_13"
     t.text "description"
     t.date "released_on"
-    t.integer "publisher_id"
-    t.integer "author_id"
+    t.bigint "publisher_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cover"
     t.index ["author_id"], name: "index_books_on_author_id"
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
+  end
+
+  create_table "pg_search_documents", force: :cascade do |t|
+    t.text "content"
+    t.string "searchable_type"
+    t.bigint "searchable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
   create_table "publishers", force: :cascade do |t|
@@ -41,4 +53,6 @@ ActiveRecord::Schema.define(version: 20191109110445) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "books", "authors"
+  add_foreign_key "books", "publishers"
 end
