@@ -3,12 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'Publishers', type: :request do
 
-  before do
-    allow_any_instance_of(PublishersController).to(
-      receive(:validate_auth_scheme).and_return(true))
-    allow_any_instance_of(PublishersController).to(
-      receive(:authenticate_client).and_return(true))
-  end
+  include_context 'Skip Auth'
 
   let(:oreilly) { create(:publisher) }
   let(:dev_media) { create(:dev_media) }
