@@ -6,9 +6,10 @@ module Authentication
 
   included do
     before_action :validate_auth_scheme
+    before_action :authenticate_client
   end
 
-  protected
+  private
 
   def validate_auth_scheme
     unless authorization_request.match(/^#{AUTH_SCHEME} /)
@@ -23,6 +24,10 @@ module Authentication
 
   def authorization_request
     @authorization_request ||= request.authorization.to_s
+  end
+
+  def authenticate_client
+    unauthorized!('Client Realm') unless api_key
   end
 
   def credentials

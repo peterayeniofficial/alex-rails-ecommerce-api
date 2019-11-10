@@ -1,0 +1,12 @@
+<% # app/views/user_mailer/confirmation_email.text.erb %>
+Hello,
+
+Confirm your email by clicking on the link below:
+
+<%= link_to('Confirm Your Account',{
+             controller: "user_confirmations",
+             action: :show,
+             confirmation_token: @user.confirmation_token
+            }) %>
+
+Welcome to Alexandria!
