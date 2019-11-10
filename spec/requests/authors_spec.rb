@@ -3,6 +3,13 @@ require 'rails_helper'
 
 RSpec.describe 'Authors', type: :request do
 
+  before do
+    allow_any_instance_of(AuthorsController).to(
+      receive(:validate_auth_scheme).and_return(true))
+    allow_any_instance_of(AuthorsController).to(
+      receive(:authenticate_client).and_return(true))
+  end
+
   let(:pat) { create(:author) }
   let(:michael) { create(:michael_hartl) }
   let(:sam) { create(:sam_ruby) }
