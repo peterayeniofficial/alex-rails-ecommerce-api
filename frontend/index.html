@@ -1,0 +1,25 @@
+<!-- frontend/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Alexandria</title>
+</head>
+
+<body>
+  <div id="books"></div>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript">
+    $.ajax({
+        url: "http://localhost:3000/api/books",
+        headers: {
+          "Authorization": "Alexandria-Token api_key=1:my_api_key"
+        },
+        success : function(response) {
+          console.log("Response", response);
+          $("#books").text(JSON.stringify(response));
+        }
+    })
+  </script>
+</body>
+</html>

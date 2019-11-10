@@ -6,6 +6,10 @@ class Authenticator
     @authorization = authorization
   end
 
+  def credentials
+    @credentials ||= Hash[@authorization.scan(/(\w+)[:=] ?"?([\w|:]+)"?/)]
+  end
+
   def api_key
     return nil if credentials['api_key'].blank?
 
@@ -33,10 +37,6 @@ class Authenticator
   end
 
   private
-
-  def credentials
-    @credentials ||= Hash[@authorization.scan(/(\w+)[:=] ?"?([\w|:]+)"?/)]
-  end
 
   def secure_compare_with_hashing(a, b)
     secure_compare(Digest::SHA1.hexdigest(a), Digest::SHA1.hexdigest(b))

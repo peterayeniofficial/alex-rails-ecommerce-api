@@ -3,43 +3,33 @@ class BasePresenter
   include Rails.application.routes.url_helpers
 
   # Define a class level instance variable
-  @build_attributes = []
-  @relations = []
-  @sort_attributes = []
-  @filter_attributes = []
+  CLASS_ATTRIBUTES = {
+     build_with: :build_attributes,
+     related_to: :relations,
+     sort_by: :sort_attributes,
+     filter_by: :filter_attributes
+   }
 
-  # Open the door to class methods
-  class << self
-    # Define an accessor for the class level instance
-    # variable we created above
-    attr_accessor :relations, :sort_attributes,
-                  :filter_attributes, :build_attributes
+   CLASS_ATTRIBUTES.each { |k, v| instance_variable_set("@#{v}", []) }
 
-    # Create the actual class method that will
-    # be used in the subclasses
-    # We use the splash operation '*' to get all
-    # the arguments passed in an array
-    def build_with(*args)
-      @build_attributes = args.map(&:to_s)
-    end
+   class << self
+     attr_accessor *CLASS_ATTRIBUTES.values
 
-    # Add a bunch of methods that will be used in the
-    # model presenters
-    def related_to(*args)
-      @relations = args.map(&:to_s)
-    end
+     CLASS_ATTRIBUTES.each do |k, v|
+       define_method k do |*args|
+         instance_variable_set("@#{v}", args.map(&:to_s))
+       end
+     end
 
-    def sort_by(*args)
-      @sort_attributes = args.map(&:to_s)
-    end
+     def cached
+       @cached = true
+     end
 
-    def filter_by(*args)
-      @filter_attributes = args.map(&:to_s)
-    end
+     def cached?
+       @cached
+     end
+   end
 
-
-  end
-  
   attr_accessor :object, :params, :data
 
   def initialize(object, params, options = {})
@@ -58,12 +48,33 @@ class BasePresenter
     self
   end
 
+  # To build the cache key, we need the list of requested fields
+  # sorted to make it reusable
+  def validated_fields
+    @fields_params ||= field_picker.fields.sort.join(',')
+  end
+
+  # Same for embeds
+  def validated_embeds
+    @embed_params ||= embed_picker.embeds.sort.join(',')
+  end
+
   def fields
-    FieldPicker.new(self).pick
+    @fields ||= field_picker.pick
   end
 
   def embeds
-    EmbedPicker.new(self).embed
+    @embeds ||= embed_picker.embed
+  end
+
+  private
+
+  def field_picker
+    @field_picker ||= FieldPicker.new(self)
+  end
+
+  def embed_picker
+    @embed_picker ||= EmbedPicker.new(self)
   end
 
 end

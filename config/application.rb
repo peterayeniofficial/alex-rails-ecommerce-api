@@ -36,5 +36,6 @@ module Alex
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.filter_parameters += [:cover]
+    config.middleware.use Rack::Deflater
   end
 end

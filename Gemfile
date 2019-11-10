@@ -37,6 +37,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'pundit'
 gem 'money-rails', '1.11.0'
 gem 'stripe'
+gem 'oj'
+gem 'rack-cors', :require => 'rack/cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
