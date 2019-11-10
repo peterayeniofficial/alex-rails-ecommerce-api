@@ -2,6 +2,8 @@
 class User < ApplicationRecord
     has_secure_password
     has_many :access_tokens
+    has_many :purchases
+    has_many :books, through: :purchases
   
     before_validation :generate_confirmation_token, on: :create
     before_validation :downcase_email

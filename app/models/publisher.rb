@@ -1,5 +1,5 @@
 class Publisher < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   multisearchable against: [:name]
   
   has_many :books

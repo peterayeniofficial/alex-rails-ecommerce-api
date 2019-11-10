@@ -21,4 +21,6 @@
 
 /public/uploads
 /imagesclear
+/config/env.rb
+
 

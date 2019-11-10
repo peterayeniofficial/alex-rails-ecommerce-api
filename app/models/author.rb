@@ -1,5 +1,5 @@
 class Author < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   multisearchable against: [:given_name, :family_name]
   has_many :books
 
